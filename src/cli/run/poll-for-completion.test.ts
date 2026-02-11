@@ -45,12 +45,37 @@ describe("pollForCompletion", () => {
     const result = await pollForCompletion(ctx, eventState, abortController, {
       pollIntervalMs: 10,
       requiredConsecutive: 3,
+      minStabilizationMs: 0,
     })
 
     //#then - exits with 0 but only after 3 consecutive checks
     expect(result).toBe(0)
     const todoCallCount = (ctx.client.session.todo as ReturnType<typeof mock>).mock.calls.length
     expect(todoCallCount).toBeGreaterThanOrEqual(3)
+  })
+
+  it("does not check completion during stabilization period after first meaningful work", async () => {
+    //#given - 0 todos, 0 children, session idle, meaningful work done, short stabilization
+    spyOn(console, "log").mockImplementation(() => {})
+    spyOn(console, "error").mockImplementation(() => {})
+    const ctx = createMockContext()
+    const eventState = createEventState()
+    eventState.mainSessionIdle = true
+    eventState.hasReceivedMeaningfulWork = true
+    const abortController = new AbortController()
+
+    //#when - abort before stabilization period ends
+    setTimeout(() => abortController.abort(), 50)
+    const result = await pollForCompletion(ctx, eventState, abortController, {
+      pollIntervalMs: 10,
+      requiredConsecutive: 3,
+      minStabilizationMs: 200,
+    })
+
+    //#then - should be aborted (130) because stabilization hadn't elapsed yet
+    expect(result).toBe(130)
+    const todoCallCount = (ctx.client.session.todo as ReturnType<typeof mock>).mock.calls.length
+    expect(todoCallCount).toBe(0)
   })
 
   it("does not exit when currentTool is set - resets consecutive counter", async () => {
@@ -110,6 +135,7 @@ describe("pollForCompletion", () => {
     const result = await pollForCompletion(ctx, eventState, abortController, {
       pollIntervalMs: 10,
       requiredConsecutive: 3,
+      minStabilizationMs: 0,
     })
     const elapsedMs = Date.now() - startMs
 
