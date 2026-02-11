@@ -1,10 +1,12 @@
 import { join } from "node:path"
+import { homedir } from "node:os"
+import { sanitizePathSegment } from "../../features/claude-tasks/storage"
 
 const SISYPHUS_DIR = ".sisyphus"
 const AGENT_TEAMS_DIR = "agent-teams"
 
 export function getAgentTeamsRootDir(): string {
-  return join(process.cwd(), SISYPHUS_DIR, AGENT_TEAMS_DIR)
+  return join(homedir(), SISYPHUS_DIR, AGENT_TEAMS_DIR)
 }
 
 export function getTeamsRootDir(): string {
@@ -16,7 +18,7 @@ export function getTeamTasksRootDir(): string {
 }
 
 export function getTeamDir(teamName: string): string {
-  return join(getTeamsRootDir(), teamName)
+  return join(getTeamsRootDir(), sanitizePathSegment(teamName))
 }
 
 export function getTeamConfigPath(teamName: string): string {
@@ -32,7 +34,7 @@ export function getTeamInboxPath(teamName: string, agentName: string): string {
 }
 
 export function getTeamTaskDir(teamName: string): string {
-  return join(getTeamTasksRootDir(), teamName)
+  return join(getTeamTasksRootDir(), sanitizePathSegment(teamName))
 }
 
 export function getTeamTaskPath(teamName: string, taskId: string): string {

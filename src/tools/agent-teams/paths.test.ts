@@ -1,7 +1,6 @@
 /// <reference types="bun-types" />
-import { afterEach, beforeEach, describe, expect, test } from "bun:test"
-import { mkdtempSync, rmSync } from "node:fs"
-import { tmpdir } from "node:os"
+import { describe, expect, test } from "bun:test"
+import { homedir } from "node:os"
 import { join } from "node:path"
 import {
   getAgentTeamsRootDir,
@@ -16,23 +15,9 @@ import {
 } from "./paths"
 
 describe("agent-teams paths", () => {
-  let originalCwd: string
-  let tempProjectDir: string
-
-  beforeEach(() => {
-    originalCwd = process.cwd()
-    tempProjectDir = mkdtempSync(join(tmpdir(), "agent-teams-paths-"))
-    process.chdir(tempProjectDir)
-  })
-
-  afterEach(() => {
-    process.chdir(originalCwd)
-    rmSync(tempProjectDir, { recursive: true, force: true })
-  })
-
-  test("uses project-local .sisyphus directory as storage root", () => {
+  test("uses user-global .sisyphus directory as storage root", () => {
     //#given
-    const expectedRoot = join(tempProjectDir, ".sisyphus", "agent-teams")
+    const expectedRoot = join(homedir(), ".sisyphus", "agent-teams")
 
     //#when
     const root = getAgentTeamsRootDir()
@@ -43,7 +28,7 @@ describe("agent-teams paths", () => {
 
   test("builds expected teams and tasks root directories", () => {
     //#given
-    const expectedRoot = join(tempProjectDir, ".sisyphus", "agent-teams")
+    const expectedRoot = join(homedir(), ".sisyphus", "agent-teams")
 
     //#when
     const teamsRoot = getTeamsRootDir()
@@ -59,7 +44,7 @@ describe("agent-teams paths", () => {
     const teamName = "alpha_team"
     const agentName = "worker_1"
     const taskId = "T-123"
-    const expectedTeamDir = join(getTeamsRootDir(), teamName)
+    const expectedTeamDir = join(getTeamsRootDir(), "alpha_team")
 
     //#when
     const teamDir = getTeamDir(teamName)
@@ -74,7 +59,23 @@ describe("agent-teams paths", () => {
     expect(configPath).toBe(join(expectedTeamDir, "config.json"))
     expect(inboxDir).toBe(join(expectedTeamDir, "inboxes"))
     expect(inboxPath).toBe(join(expectedTeamDir, "inboxes", `${agentName}.json`))
-    expect(taskDir).toBe(join(getTeamTasksRootDir(), teamName))
-    expect(taskPath).toBe(join(getTeamTasksRootDir(), teamName, `${taskId}.json`))
+    expect(taskDir).toBe(join(getTeamTasksRootDir(), "alpha_team"))
+    expect(taskPath).toBe(join(getTeamTasksRootDir(), "alpha_team", `${taskId}.json`))
+  })
+
+  test("sanitizes team names with invalid characters", () => {
+    //#given
+    const invalidTeamName = "team space/with@special#chars"
+    const expectedSanitized = "team-space-with-special-chars"
+
+    //#when
+    const teamDir = getTeamDir(invalidTeamName)
+    const configPath = getTeamConfigPath(invalidTeamName)
+    const taskDir = getTeamTaskDir(invalidTeamName)
+
+    //#then
+    expect(teamDir).toBe(join(getTeamsRootDir(), expectedSanitized))
+    expect(configPath).toBe(join(getTeamsRootDir(), expectedSanitized, "config.json"))
+    expect(taskDir).toBe(join(getTeamTasksRootDir(), expectedSanitized))
   })
 })
