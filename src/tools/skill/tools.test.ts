@@ -4,6 +4,7 @@ import * as fs from "node:fs"
 import { createSkillTool } from "./tools"
 import { SkillMcpManager } from "../../features/skill-mcp-manager"
 import type { LoadedSkill } from "../../features/opencode-skill-loader/types"
+import type { CommandInfo } from "../slashcommand/types"
 import type { Tool as McpTool } from "@modelcontextprotocol/sdk/types.js"
 
 const originalReadFileSync = fs.readFileSync.bind(fs)
@@ -102,6 +103,61 @@ describe("skill tool - synchronous description", () => {
 
     // then
     expect(tool.description).toContain("No skills are currently available")
+  })
+})
+
+describe("skill tool - command listing format", () => {
+  it("uses XML format for commands in description", () => {
+    // given
+    const commands: CommandInfo[] = [
+      {
+        name: "publish",
+        path: "/test/commands/publish",
+        metadata: { name: "publish", description: "Publish to npm", argumentHint: "<patch|minor|major>" },
+        scope: "opencode-project",
+      },
+      {
+        name: "commit",
+        path: "/test/commands/commit",
+        metadata: { name: "commit", description: "Commits changes" },
+        scope: "builtin",
+      },
+    ]
+
+    // when
+    const tool = createSkillTool({ skills: [], commands })
+
+    // then
+    expect(tool.description).toContain("<available_commands>")
+    expect(tool.description).toContain("</available_commands>")
+    expect(tool.description).toContain("<command>")
+    expect(tool.description).toContain("<name>/publish <patch|minor|major></name>")
+    expect(tool.description).toContain("<description>Publish to npm</description>")
+    expect(tool.description).toContain("<scope>opencode-project</scope>")
+    expect(tool.description).toContain("<name>/commit</name>")
+    expect(tool.description).toContain("<scope>builtin</scope>")
+  })
+
+  it("uses XML format for both skills and commands together", () => {
+    // given
+    const loadedSkills = [createMockSkill("test-skill")]
+    const commands: CommandInfo[] = [
+      {
+        name: "deploy",
+        path: "/test/commands/deploy",
+        metadata: { name: "deploy", description: "Deploy app" },
+        scope: "user",
+      },
+    ]
+
+    // when
+    const tool = createSkillTool({ skills: loadedSkills, commands })
+
+    // then
+    expect(tool.description).toContain("<available_skills>")
+    expect(tool.description).toContain("<available_commands>")
+    expect(tool.description).toContain("<command>")
+    expect(tool.description).toContain("<name>/deploy</name>")
   })
 })
 

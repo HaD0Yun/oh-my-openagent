@@ -48,11 +48,18 @@ function formatCombinedDescription(skills: SkillInfo[], commands: CommandInfo[])
   }
 
   if (commands.length > 0) {
-    const commandLines = commands.map(cmd => {
+    const commandsXml = commands.map(cmd => {
       const hint = cmd.metadata.argumentHint ? ` ${cmd.metadata.argumentHint}` : ""
-      return `  - /${cmd.name}${hint}: ${cmd.metadata.description || "(no description)"} (${cmd.scope})`
+      const parts = [
+        "  <command>",
+        `    <name>/${cmd.name}${hint}</name>`,
+        `    <description>${cmd.metadata.description || "(no description)"}</description>`,
+        `    <scope>${cmd.scope}</scope>`,
+        "  </command>",
+      ]
+      return parts.join("\n")
     }).join("\n")
-    lines.push(`\n<available_commands>\n${commandLines}\n</available_commands>`)
+    lines.push(`\n<available_commands>\n${commandsXml}\n</available_commands>`)
   }
 
   return TOOL_DESCRIPTION_PREFIX + lines.join("")
