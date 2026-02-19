@@ -9,6 +9,7 @@ import { parseRalphLoopArguments } from "../hooks/ralph-loop/command-arguments"
 import { getAgentConfigKey } from "../shared/agent-display-names"
 
 import type { CreatedHooks } from "../create-hooks"
+import { COUNCIL_MEMBER_KEY_PREFIX } from "../agents/builtin-agents/council-member-agents"
 
 export function createToolExecuteBeforeHandler(args: {
   ctx: PluginContext
@@ -27,7 +28,7 @@ export function createToolExecuteBeforeHandler(args: {
 
     const tasks = backgroundManager.getTasksByParentSession(sessionID)
     return tasks.some((task) =>
-      task.agent === "council-member" &&
+      (task.agent === "council-member" || task.agent.startsWith(COUNCIL_MEMBER_KEY_PREFIX)) &&
       (task.status === "pending" || task.status === "running")
     )
   }
