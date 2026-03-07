@@ -18,6 +18,7 @@ import {
 import { resetMessageCursor } from "../shared";
 import { log } from "../shared/logger";
 import { shouldRetryError } from "../shared/model-error-classifier";
+import { extractRetryAttempt, extractRetryStatusModel, normalizeRetryStatusMessage } from "../shared/retry-status-utils";
 import { clearSessionModel, setSessionModel } from "../shared/session-model-state";
 import { deleteSessionTools } from "../shared/session-tools-store";
 import { lspManager } from "../tools";
@@ -342,10 +343,15 @@ export function createEventHandler(args: {
       const sessionID = props?.sessionID as string | undefined;
       const status = props?.status as { type?: string; attempt?: number; message?: string; next?: number } | undefined;
 
-      if (sessionID && status?.type === "retry" && isModelFallbackEnabled) {
+      if (sessionID && status?.type === "retry" && !isRuntimeFallbackEnabled && isModelFallbackEnabled) {
         try {
           const retryMessage = typeof status.message === "string" ? status.message : "";
-          const retryKey = `${status.attempt ?? "?"}:${status.next ?? "?"}:${retryMessage}`;
+          const retryAttempt = extractRetryAttempt(status.attempt, retryMessage);
+          const retryModel =
+            extractRetryStatusModel(retryMessage) ??
+            lastKnownModelBySession.get(sessionID)?.modelID ??
+            "unknown-model";
+          const retryKey = `${retryAttempt}:${retryModel}:${normalizeRetryStatusMessage(retryMessage)}`;
           if (lastHandledRetryStatusKey.get(sessionID) === retryKey) {
             return;
           }
