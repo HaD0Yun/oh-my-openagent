@@ -16,6 +16,7 @@ import {
   buildOracleSection,
   buildHardBlocksSection,
   buildAntiPatternsSection,
+  buildAntiDuplicationSection,
   categorizeTools,
 } from "./dynamic-agent-prompt-builder";
 
@@ -290,10 +291,12 @@ Prompt structure for each agent:
 - Fire 2-5 explore agents in parallel for any non-trivial codebase question
 - Parallelize independent file reads — don't read files one at a time
 - NEVER use \`run_in_background=false\` for explore/librarian
-- Continue your work immediately after launching background agents
+- Continue only with non-overlapping work after launching background agents
 - Collect results with \`background_output(task_id="...")\` when needed
 - BEFORE final answer, cancel DISPOSABLE tasks individually: \`background_cancel(taskId="bg_explore_xxx")\`, \`background_cancel(taskId="bg_librarian_xxx")\`
 - **NEVER use \`background_cancel(all=true)\`** — it kills tasks whose results you haven't collected yet
+
+${buildAntiDuplicationSection()}
 
 ### Search Stop Conditions
 
