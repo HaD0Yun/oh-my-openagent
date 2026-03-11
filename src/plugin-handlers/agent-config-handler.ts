@@ -38,7 +38,7 @@ export async function applyAgentConfig(params: {
   pluginComponents: PluginComponents;
 }): Promise<Record<string, unknown>> {
   const migratedDisabledAgents = (params.pluginConfig.disabled_agents ?? []).map(
-    (agent) => {
+    (agent: string) => {
       return AGENT_NAME_MAP[agent.toLowerCase()] ?? AGENT_NAME_MAP[agent] ?? agent;
     },
   ) as typeof params.pluginConfig.disabled_agents;
@@ -77,6 +77,31 @@ export async function applyAgentConfig(params: {
   const disabledSkills = new Set<string>(params.pluginConfig.disabled_skills ?? []);
   const useTaskSystem = params.pluginConfig.experimental?.task_system ?? false;
   const disableOmoEnv = params.pluginConfig.experimental?.disable_omo_env ?? false;
+  const includeClaudeAgents = params.pluginConfig.claude_code?.agents ?? true;
+  const userAgents = includeClaudeAgents ? loadUserAgents() : {};
+  const projectAgents = includeClaudeAgents ? loadProjectAgents(params.ctx.directory) : {};
+  const rawPluginAgents = params.pluginComponents.agents;
+  const pluginAgents = Object.fromEntries(
+    Object.entries(rawPluginAgents).map(([key, value]) => [
+      key,
+      value ? migrateAgentConfig(value as Record<string, unknown>) : value,
+    ]),
+  );
+  const configAgent = params.config.agent as AgentConfigRecord | undefined;
+  const registeredAgentSummaries = Object.entries({
+    ...userAgents,
+    ...projectAgents,
+    ...pluginAgents,
+    ...configAgent,
+  })
+    .filter((entry): entry is [string, Record<string, unknown>] => {
+      const registeredAgent = entry[1];
+      return typeof registeredAgent === "object" && registeredAgent !== null;
+    })
+    .map(([name, registeredAgent]) => ({
+      name,
+      ...registeredAgent,
+    }));
 
   const builtinAgents = await createBuiltinAgents(
     migratedDisabledAgents,
@@ -86,7 +111,7 @@ export async function applyAgentConfig(params: {
     params.pluginConfig.categories,
     params.pluginConfig.git_master,
     allDiscoveredSkills,
-    params.ctx.client,
+    registeredAgentSummaries,
     browserProvider,
     currentModel,
     disabledSkills,
@@ -94,20 +119,8 @@ export async function applyAgentConfig(params: {
     disableOmoEnv,
   );
 
-  const includeClaudeAgents = params.pluginConfig.claude_code?.agents ?? true;
-  const userAgents = includeClaudeAgents ? loadUserAgents() : {};
-  const projectAgents = includeClaudeAgents ? loadProjectAgents(params.ctx.directory) : {};
-
-  const rawPluginAgents = params.pluginComponents.agents;
-  const pluginAgents = Object.fromEntries(
-    Object.entries(rawPluginAgents).map(([key, value]) => [
-      key,
-      value ? migrateAgentConfig(value as Record<string, unknown>) : value,
-    ]),
-  );
-
   const disabledAgentNames = new Set(
-    (migratedDisabledAgents ?? []).map(a => a.toLowerCase())
+    (migratedDisabledAgents ?? []).map((agentName: string) => agentName.toLowerCase())
   );
 
   const filterDisabledAgents = (agents: Record<string, unknown>) =>
@@ -122,8 +135,6 @@ export async function applyAgentConfig(params: {
   const replacePlan = params.pluginConfig.sisyphus_agent?.replace_plan ?? true;
   const shouldDemotePlan = plannerEnabled && replacePlan;
   const configuredDefaultAgent = getConfiguredDefaultAgent(params.config);
-
-  const configAgent = params.config.agent as AgentConfigRecord | undefined;
 
   if (isSisyphusEnabled && builtinAgents.sisyphus) {
     if (configuredDefaultAgent) {
