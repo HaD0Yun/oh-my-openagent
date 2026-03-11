@@ -40,6 +40,28 @@ describe("model-error-classifier", () => {
     expect(result).toBe(true)
   })
 
+  test("treats FreeUsageLimitError names as retryable", () => {
+    //#given
+    const error = { name: "FreeUsageLimitError" }
+
+    //#when
+    const result = shouldRetryError(error)
+
+    //#then
+    expect(result).toBe(true)
+  })
+
+  test("treats free tier usage limit messages as retryable", () => {
+    //#given
+    const error = { message: "Free tier daily limit reached for this provider" }
+
+    //#when
+    const result = shouldRetryError(error)
+
+    //#then
+    expect(result).toBe(true)
+  })
+
   test("selectFallbackProvider prefers first connected provider in preference order", () => {
     //#given
     readConnectedProvidersCacheMock.mockReturnValue(["anthropic", "nvidia"])

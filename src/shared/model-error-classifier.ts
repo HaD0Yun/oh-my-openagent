@@ -6,13 +6,14 @@ import { readConnectedProvidersCache } from "./connected-providers-cache"
  * These errors completely halt the action loop and should trigger fallback retry.
  */
 const RETRYABLE_ERROR_NAMES = new Set([
-  "ProviderModelNotFoundError",
-  "RateLimitError",
-  "QuotaExceededError",
-  "InsufficientCreditsError",
-  "ModelUnavailableError",
-  "ProviderConnectionError",
-  "AuthenticationError",
+  "providermodelnotfounderror",
+  "ratelimiterror",
+  "quotaexceedederror",
+  "insufficientcreditserror",
+  "modelunavailableerror",
+  "providerconnectionerror",
+  "authenticationerror",
+  "freeusagelimiterror",
 ])
 
 /**
@@ -20,24 +21,28 @@ const RETRYABLE_ERROR_NAMES = new Set([
  * These errors are typically user-induced or fixable without switching models.
  */
 const NON_RETRYABLE_ERROR_NAMES = new Set([
-  "MessageAbortedError",
-  "PermissionDeniedError",
-  "ContextLengthError",
-  "TimeoutError",
-  "ValidationError",
-  "SyntaxError",
-  "UserError",
+  "messageabortederror",
+  "permissiondeniederror",
+  "contextlengtherror",
+  "timeouterror",
+  "validationerror",
+  "syntaxerror",
+  "usererror",
 ])
 
 /**
  * Message patterns that indicate a retryable error even without a known error name.
  */
-const RETRYABLE_MESSAGE_PATTERNS = [
+const RETRYABLE_MESSAGE_PATTERNS: Array<string | RegExp> = [
   "rate_limit",
   "rate limit",
   "quota",
   "quota will reset after",
   "usage limit has been reached",
+  /free\s+usage/i,
+  /free\s+tier/i,
+  /daily\s+limit/i,
+  /limit\s+reached/i,
   "all credentials for model",
   "cooling down",
   "exhausted your capacity",
@@ -77,6 +82,11 @@ function hasProviderAutoRetrySignal(message: string): boolean {
   return AUTO_RETRY_GATE_PATTERNS.some((pattern) => message.includes(pattern))
 }
 
+function matchesRetryableMessagePattern(message: string): boolean {
+  return RETRYABLE_MESSAGE_PATTERNS.some((pattern) =>
+    typeof pattern === "string" ? message.includes(pattern) : pattern.test(message))
+}
+
 export interface ErrorInfo {
   name?: string
   message?: string
@@ -89,12 +99,14 @@ export interface ErrorInfo {
 export function isRetryableModelError(error: ErrorInfo): boolean {
   // If we have an error name, check against known lists
   if (error.name) {
+    const normalizedErrorName = error.name.toLowerCase()
+
     // Explicit non-retryable takes precedence
-    if (NON_RETRYABLE_ERROR_NAMES.has(error.name)) {
+    if (NON_RETRYABLE_ERROR_NAMES.has(normalizedErrorName)) {
       return false
     }
     // Check if it's a known retryable error
-    if (RETRYABLE_ERROR_NAMES.has(error.name)) {
+    if (RETRYABLE_ERROR_NAMES.has(normalizedErrorName)) {
       return true
     }
   }
@@ -104,7 +116,7 @@ export function isRetryableModelError(error: ErrorInfo): boolean {
   if (hasProviderAutoRetrySignal(msg)) {
     return true
   }
-  return RETRYABLE_MESSAGE_PATTERNS.some((pattern) => msg.includes(pattern))
+  return matchesRetryableMessagePattern(msg)
 }
 
 /**
