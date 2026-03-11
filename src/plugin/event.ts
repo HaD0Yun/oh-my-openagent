@@ -22,7 +22,7 @@ import { getAgentConfigKey } from "../shared/agent-display-names";
 import { log } from "../shared/logger";
 import { shouldRetryError } from "../shared/model-error-classifier";
 import { buildFallbackChainFromModels } from "../shared/fallback-chain-from-models";
-import { extractRetryAttempt, normalizeRetryStatusMessage } from "../shared/retry-status-utils";
+import { extractRetryAttempt, extractRetryStatusModel, normalizeRetryStatusMessage } from "../shared/retry-status-utils";
 import { clearSessionModel, setSessionModel } from "../shared/session-model-state";
 import { deleteSessionTools } from "../shared/session-tools-store";
 import { lspManager } from "../tools";
@@ -387,11 +387,14 @@ export function createEventHandler(args: {
       if (sessionID && status?.type === "retry" && isModelFallbackEnabled && !isRuntimeFallbackEnabled) {
         try {
           const retryMessage = typeof status.message === "string" ? status.message : "";
-          const parsedForKey = extractProviderModelFromErrorMessage(retryMessage);
           const retryAttempt = extractRetryAttempt(status.attempt, retryMessage);
+          const retryModel =
+            extractRetryStatusModel(retryMessage) ??
+            lastKnownModelBySession.get(sessionID)?.modelID ??
+            "unknown-model";
           // Deduplicate countdown updates for the same retry attempt/model.
           // Messages like "retrying in 7m 56s" change every second but should only trigger once.
-          const retryKey = `${retryAttempt}:${parsedForKey.providerID ?? ""}/${parsedForKey.modelID ?? ""}:${normalizeRetryStatusMessage(retryMessage)}`;
+          const retryKey = `${retryAttempt}:${retryModel}:${normalizeRetryStatusMessage(retryMessage)}`;
           if (lastHandledRetryStatusKey.get(sessionID) === retryKey) {
             return;
           }
