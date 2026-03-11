@@ -29,6 +29,7 @@ export const RETRYABLE_ERROR_PATTERNS = [
   /quota\s+will\s+reset\s+after/i,
   /all\s+credentials\s+for\s+model/i,
   /cool(?:ing)?\s+down/i,
+  /cooldown/i,
   /exhausted\s+your\s+capacity/i,
   /usage\s+limit\s+has\s+been\s+reached/i,
   /service.?unavailable/i,
