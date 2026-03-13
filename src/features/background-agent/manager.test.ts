@@ -1572,6 +1572,189 @@ describe("BackgroundManager.trackTask", () => {
   })
 })
 
+describe("BackgroundManager.launch and resume cleanup regressions", () => {
+  test("launch should register pending task under parent before background start finishes", async () => {
+    //#given
+    let releaseCreate: (() => void) | undefined
+    const createGate = new Promise<void>((resolve) => {
+      releaseCreate = resolve
+    })
+    const client = {
+      session: {
+        get: async () => ({ data: { directory: "/test/dir" } }),
+        create: async () => {
+          await createGate
+          return { data: { id: "session-launch-pending" } }
+        },
+        promptAsync: async () => ({}),
+        abort: async () => ({}),
+      },
+    }
+    const manager = new BackgroundManager({ client, directory: tmpdir() } as unknown as PluginInput)
+
+    //#when
+    const task = await manager.launch({
+      description: "pending registration",
+      prompt: "launch prompt",
+      agent: "explore",
+      parentSessionID: "parent-launch-pending",
+      parentMessageID: "msg-launch-pending",
+    })
+
+    //#then
+    expect(getPendingByParent(manager).get("parent-launch-pending")?.has(task.id)).toBe(true)
+    expect(manager.getTask(task.id)?.status).toBe("pending")
+
+    releaseCreate?.()
+    await flushBackgroundNotifications()
+    manager.shutdown()
+  })
+
+  test("launch should clean pending bookkeeping and format missing-agent prompt errors", async () => {
+    //#given
+    const abortedSessionIDs: string[] = []
+    const promptAsyncCalls: string[] = []
+    const client = {
+      session: {
+        get: async () => ({ data: { directory: "/test/dir" } }),
+        create: async () => ({ data: { id: "session-launch-error" } }),
+        promptAsync: async (args: { path: { id: string } }) => {
+          promptAsyncCalls.push(args.path.id)
+          if (args.path.id === "session-launch-error") {
+            throw new Error("agent.name is undefined")
+          }
+          return {}
+        },
+        abort: async (args: { path: { id: string } }) => {
+          abortedSessionIDs.push(args.path.id)
+          return {}
+        },
+        messages: async () => ({ data: [] }),
+      },
+    }
+    const manager = new BackgroundManager({ client, directory: tmpdir() } as unknown as PluginInput)
+
+    //#when
+    const launchedTask = await manager.launch({
+      description: "launch prompt error",
+      prompt: "launch prompt",
+      agent: "missing-agent",
+      parentSessionID: "parent-launch-error",
+      parentMessageID: "msg-launch-error",
+    })
+    await flushBackgroundNotifications()
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    //#then
+    const storedTask = manager.getTask(launchedTask.id)
+    expect(storedTask?.status).toBe("interrupt")
+    expect(storedTask?.error).toBe('Agent "missing-agent" not found. Make sure the agent is registered in your opencode.json or provided by a plugin.')
+    expect(storedTask?.concurrencyKey).toBeUndefined()
+    expect(storedTask?.completedAt).toBeInstanceOf(Date)
+    expect(getPendingByParent(manager).get("parent-launch-error")).toBeUndefined()
+    expect(abortedSessionIDs).toContain("session-launch-error")
+    expect(promptAsyncCalls).toContain("parent-launch-error")
+
+    manager.shutdown()
+  })
+
+  test("resume should clean pending bookkeeping and preserve raw prompt errors", async () => {
+    //#given
+    const abortedSessionIDs: string[] = []
+    const promptAsyncCalls: string[] = []
+    const client = {
+      session: {
+        promptAsync: async (args: { path: { id: string } }) => {
+          promptAsyncCalls.push(args.path.id)
+          if (args.path.id === "session-resume-error") {
+            throw new Error("resume prompt exploded")
+          }
+          return {}
+        },
+        abort: async (args: { path: { id: string } }) => {
+          abortedSessionIDs.push(args.path.id)
+          return {}
+        },
+        messages: async () => ({ data: [] }),
+      },
+    }
+    const manager = new BackgroundManager({ client, directory: tmpdir() } as unknown as PluginInput)
+    const task: BackgroundTask = {
+      id: "task-resume-error",
+      sessionID: "session-resume-error",
+      parentSessionID: "parent-before-resume-error",
+      parentMessageID: "msg-before-resume-error",
+      description: "resume prompt error",
+      prompt: "resume prompt",
+      agent: "explore",
+      status: "completed",
+      startedAt: new Date(),
+      completedAt: new Date(),
+      concurrencyGroup: "explore",
+    }
+    getTaskMap(manager).set(task.id, task)
+
+    //#when
+    await manager.resume({
+      sessionId: "session-resume-error",
+      prompt: "resume now",
+      parentSessionID: "parent-resume-error",
+      parentMessageID: "msg-resume-error",
+    })
+    await flushBackgroundNotifications()
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    //#then
+    expect(task.status).toBe("interrupt")
+    expect(task.error).toBe("resume prompt exploded")
+    expect(task.concurrencyKey).toBeUndefined()
+    expect(task.completedAt).toBeInstanceOf(Date)
+    expect(getPendingByParent(manager).get("parent-resume-error")).toBeUndefined()
+    expect(abortedSessionIDs).toContain("session-resume-error")
+    expect(promptAsyncCalls).toContain("parent-resume-error")
+
+    manager.shutdown()
+  })
+
+  test("trackTask should move pending bookkeeping when parent session changes", async () => {
+    //#given
+    const manager = createBackgroundManager()
+    stubNotifyParentSession(manager)
+    const existingTask: BackgroundTask = {
+      id: "task-parent-move",
+      sessionID: "session-parent-move",
+      parentSessionID: "parent-before-move",
+      parentMessageID: "msg-before-move",
+      description: "tracked external task",
+      prompt: "",
+      agent: "task",
+      status: "running",
+      startedAt: new Date(),
+      progress: {
+        toolCalls: 0,
+        lastUpdate: new Date(),
+      },
+    }
+    getTaskMap(manager).set(existingTask.id, existingTask)
+    getPendingByParent(manager).set("parent-before-move", new Set([existingTask.id]))
+
+    //#when
+    await manager.trackTask({
+      taskId: existingTask.id,
+      sessionID: existingTask.sessionID!,
+      parentSessionID: "parent-after-move",
+      description: existingTask.description,
+      agent: existingTask.agent,
+    })
+
+    //#then
+    expect(getPendingByParent(manager).get("parent-before-move")).toBeUndefined()
+    expect(getPendingByParent(manager).get("parent-after-move")?.has(existingTask.id)).toBe(true)
+
+    manager.shutdown()
+  })
+})
+
 describe("BackgroundManager.resume concurrency key", () => {
   let manager: BackgroundManager
 
