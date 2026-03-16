@@ -95,11 +95,18 @@ export async function executeRunSession(
   const resolvedModel = resolveRunModel(model)
   const abortController = new AbortController()
   const startTime = Date.now()
+  let resolvedSessionId: string | undefined
+  
+  // Check if signal was already aborted before setting up listener
+  if (signal?.aborted) {
+    abortController.abort()
+  }
+  
   const forwardAbort = () => abortController.abort()
   signal?.addEventListener("abort", forwardAbort, { once: true })
 
   try {
-    const resolvedSessionId = await resolveSession({
+    resolvedSessionId = await resolveSession({
       client,
       sessionId,
       directory,
@@ -182,12 +189,12 @@ export async function executeRunSession(
     const serialized = serializeError(error)
     await eventObserver?.onEvent?.({
       type: "session.error",
-      sessionId: sessionId ?? "",
+      sessionId: resolvedSessionId ?? sessionId ?? "",
       error: serialized,
     })
     await eventObserver?.onError?.({
       type: "session.error",
-      sessionId: sessionId ?? "",
+      sessionId: resolvedSessionId ?? sessionId ?? "",
       error: serialized,
     })
     throw error

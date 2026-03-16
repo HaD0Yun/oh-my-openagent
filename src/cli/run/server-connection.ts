@@ -26,7 +26,7 @@ async function startServer(options: {
   logger?: RunLogger
 }): Promise<ServerConnection> {
   const { signal, port, logger } = options
-  const log = logger?.log ?? console.log
+  const log = logger?.log?.bind(logger) ?? console.log
   const { client, server } = await withWorkingOpencodePath(() =>
     createOpencode({ signal, port, hostname: "127.0.0.1" }),
   )

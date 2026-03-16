@@ -65,6 +65,7 @@ export function createOmoRunner(options: CreateOmoRunnerOptions): OmoRunner {
     onError,
   } = options
   let connectionPromise: Promise<ServerConnection> | null = null
+  let connectionController: AbortController | null = null
   let closed = false
   let activeRun: Promise<unknown> | null = null
 
@@ -78,11 +79,11 @@ export function createOmoRunner(options: CreateOmoRunnerOptions): OmoRunner {
       throw new Error("Runner is closed")
     }
     if (connectionPromise === null) {
-      const controller = new AbortController()
+      connectionController = new AbortController()
       connectionPromise = createServerConnection({
         port,
         attach,
-        signal: controller.signal,
+        signal: connectionController.signal,
         logger: silentLogger,
       })
     }
@@ -178,9 +179,11 @@ export function createOmoRunner(options: CreateOmoRunnerOptions): OmoRunner {
     },
     async close() {
       closed = true
+      connectionController?.abort()
       const connection = await connectionPromise
       connection?.cleanup()
       connectionPromise = null
+      connectionController = null
     },
   }
 }
