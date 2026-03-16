@@ -72,7 +72,7 @@ Use ultrawork (ulw) to spawn UltraBrain agents in parallel. Each UB agent gets a
 ## ADDITIONAL BLOCKERS FROM GPT-5.4 REVIEW
 
 ### G1: Package Identity Split-Brain
-**Problem:** Installer writes oh-my-openagent but doctor, auto-update, version lookup, publish workflow still reference oh-my-opencode. Half-migrated state.
+**Problem:** Installer writes oh-my-openagent but doctor, auto-update, version lookup, publish workflow still reference oh-my-openagent. Half-migrated state.
 **Fix:** Audit ALL references to package name. Either complete the migration consistently or revert to single name for this release.
 **Files:** Installer, doctor, auto-update, version lookup, publish workflow -- grep for both package names
 

@@ -1,12 +1,12 @@
 {
-  "name": "oh-my-opencode",
+  "name": "oh-my-openagent",
   "version": "3.11.0",
   "description": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "oh-my-opencode": "bin/oh-my-opencode.js"
+    "oh-my-openagent": "bin/oh-my-opencode.js"
   },
   "files": [
     "dist",
@@ -76,17 +76,17 @@
     "typescript": "^5.7.3"
   },
   "optionalDependencies": {
-    "oh-my-opencode-darwin-arm64": "3.11.0",
-    "oh-my-opencode-darwin-x64": "3.11.0",
-    "oh-my-opencode-darwin-x64-baseline": "3.11.0",
-    "oh-my-opencode-linux-arm64": "3.11.0",
-    "oh-my-opencode-linux-arm64-musl": "3.11.0",
-    "oh-my-opencode-linux-x64": "3.11.0",
-    "oh-my-opencode-linux-x64-baseline": "3.11.0",
-    "oh-my-opencode-linux-x64-musl": "3.11.0",
-    "oh-my-opencode-linux-x64-musl-baseline": "3.11.0",
-    "oh-my-opencode-windows-x64": "3.11.0",
-    "oh-my-opencode-windows-x64-baseline": "3.11.0"
+    "oh-my-openagent-darwin-arm64": "3.11.0",
+    "oh-my-openagent-darwin-x64": "3.11.0",
+    "oh-my-openagent-darwin-x64-baseline": "3.11.0",
+    "oh-my-openagent-linux-arm64": "3.11.0",
+    "oh-my-openagent-linux-arm64-musl": "3.11.0",
+    "oh-my-openagent-linux-x64": "3.11.0",
+    "oh-my-openagent-linux-x64-baseline": "3.11.0",
+    "oh-my-openagent-linux-x64-musl": "3.11.0",
+    "oh-my-openagent-linux-x64-musl-baseline": "3.11.0",
+    "oh-my-openagent-windows-x64": "3.11.0",
+    "oh-my-openagent-windows-x64-baseline": "3.11.0"
   },
   "overrides": {
     "@opencode-ai/sdk": "^1.2.24"

@@ -37,7 +37,7 @@ Then capture raw data needed by agent prompts:
 
 ```bash
 # Extract versions (already in /get-unpublished-changes output)
-PUBLISHED=$(npm view oh-my-opencode version 2>/dev/null || echo "not published")
+PUBLISHED=$(npm view oh-my-openagent version 2>/dev/null || echo "not published")
 LOCAL=$(node -p "require('./package.json').version" 2>/dev/null || echo "unknown")
 
 # Raw data for agents (diffs, file lists)
@@ -85,7 +85,7 @@ task(
 <review_type>PER-CHANGE DEEP ANALYSIS</review_type>
 <change_group>{GROUP_NAME}</change_group>
 
-<project>oh-my-opencode (npm package)</project>
+<project>oh-my-openagent (npm package)</project>
 <published_version>{PUBLISHED}</published_version>
 <target_version>{LOCAL}</target_version>
 
@@ -160,7 +160,7 @@ task(
   prompt="""
 Run /review-work on the unpublished changes between v{PUBLISHED} and HEAD.
 
-GOAL: Review all changes heading into npm publish of oh-my-opencode. These changes span {COMMIT_COUNT} commits across {FILE_COUNT} files.
+GOAL: Review all changes heading into npm publish of oh-my-openagent. These changes span {COMMIT_COUNT} commits across {FILE_COUNT} files.
 
 CONSTRAINTS:
 - This is a plugin published to npm — public API stability matters
@@ -169,7 +169,7 @@ CONSTRAINTS:
 - Factory pattern (createXXX) for tools, hooks, agents
 - kebab-case files, barrel exports, no catch-all files
 
-BACKGROUND: Pre-publish review of oh-my-opencode, an OpenCode plugin with 1268 TypeScript files, 160k LOC. Changes since v{PUBLISHED} are about to be published.
+BACKGROUND: Pre-publish review of oh-my-openagent, an OpenCode plugin with 1268 TypeScript files, 160k LOC. Changes since v{PUBLISHED} are about to be published.
 
 The diff base is: git diff v{PUBLISHED}..HEAD
 
@@ -190,7 +190,7 @@ task(
   prompt="""
 <review_type>RELEASE SYNTHESIS — OVERALL ASSESSMENT</review_type>
 
-<project>oh-my-opencode (npm package)</project>
+<project>oh-my-openagent (npm package)</project>
 <published_version>{PUBLISHED}</published_version>
 <local_version>{LOCAL}</local_version>
 
@@ -325,7 +325,7 @@ Do NOT deliver the final report until ALL agents have completed.
 Compile the final report:
 
 ```markdown
-# Pre-Publish Review — oh-my-opencode
+# Pre-Publish Review — oh-my-openagent
 
 ## Release: v{PUBLISHED} -> v{LOCAL}
 **Commits:** {COMMIT_COUNT} | **Files Changed:** {FILE_COUNT} | **Agents:** {AGENT_COUNT}

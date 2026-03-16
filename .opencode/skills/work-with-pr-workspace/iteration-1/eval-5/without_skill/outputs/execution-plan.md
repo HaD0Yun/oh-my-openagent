@@ -20,7 +20,7 @@ Additionally, the binary flags ALL non-filtered comments (not just agent memos),
 ## Architecture Understanding
 
 ```
-TypeScript (oh-my-opencode)              Go Binary (go-claude-code-comment-checker)
+TypeScript (oh-my-openagent)              Go Binary (go-claude-code-comment-checker)
 ─────────────────────────────             ──────────────────────────────────────────
 hook.ts                                   main.go
  ├─ tool.execute.before                    ├─ Read JSON from stdin
@@ -33,7 +33,7 @@ hook.ts                                   main.go
              └─ append to output
 ```
 
-Key files in oh-my-opencode:
+Key files in oh-my-openagent:
 - `src/hooks/comment-checker/hook.ts` - Hook factory, registers before/after handlers
 - `src/hooks/comment-checker/cli-runner.ts` - Orchestrates CLI invocation, semaphore
 - `src/hooks/comment-checker/cli.ts` - Binary resolution, process spawning, timeout handling

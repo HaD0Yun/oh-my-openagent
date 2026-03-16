@@ -1,15 +1,15 @@
 # CLI Reference
 
-Complete reference for the `oh-my-opencode` command-line interface.
+Complete reference for the `oh-my-openagent` command-line interface.
 
 ## Basic Usage
 
 ```bash
 # Display help
-bunx oh-my-opencode
+bunx oh-my-openagent
 
 # Or with npx
-npx oh-my-opencode
+npx oh-my-openagent
 ```
 
 ## Commands
@@ -32,7 +32,7 @@ Interactive installation tool for initial Oh-My-OpenCode setup. Provides a TUI b
 ### Usage
 
 ```bash
-bunx oh-my-opencode install
+bunx oh-my-openagent install
 ```
 
 ### Installation Process
@@ -40,7 +40,7 @@ bunx oh-my-opencode install
 1. **Provider Selection**: Choose your AI provider (Claude, ChatGPT, or Gemini)
 2. **API Key Input**: Enter the API key for your selected provider
 3. **Configuration File Creation**: Generates `opencode.json` or `oh-my-opencode.json` files
-4. **Plugin Registration**: Automatically registers the oh-my-opencode plugin in OpenCode settings
+4. **Plugin Registration**: Automatically registers the oh-my-openagent plugin in OpenCode settings
 
 ### Options
 
@@ -58,7 +58,7 @@ Diagnoses your environment to ensure Oh-My-OpenCode is functioning correctly. Pe
 ### Usage
 
 ```bash
-bunx oh-my-opencode doctor
+bunx oh-my-openagent doctor
 ```
 
 ### Diagnostic Categories
@@ -83,7 +83,7 @@ bunx oh-my-opencode doctor
 ### Example Output
 
 ```
-oh-my-opencode doctor
+oh-my-openagent doctor
 
 ┌──────────────────────────────────────────────────┐
 │  Oh-My-OpenCode Doctor                           │
@@ -119,7 +119,7 @@ Executes OpenCode sessions and monitors task completion.
 ### Usage
 
 ```bash
-bunx oh-my-opencode run [prompt]
+bunx oh-my-openagent run [prompt]
 ```
 
 ### Options
@@ -148,16 +148,16 @@ Manages OAuth 2.1 authentication for remote MCP servers.
 
 ```bash
 # Login to an OAuth-protected MCP server
-bunx oh-my-opencode mcp oauth login <server-name> --server-url https://api.example.com
+bunx oh-my-openagent mcp oauth login <server-name> --server-url https://api.example.com
 
 # Login with explicit client ID and scopes
-bunx oh-my-opencode mcp oauth login my-api --server-url https://api.example.com --client-id my-client --scopes "read,write"
+bunx oh-my-openagent mcp oauth login my-api --server-url https://api.example.com --client-id my-client --scopes "read,write"
 
 # Remove stored OAuth tokens
-bunx oh-my-opencode mcp oauth logout <server-name>
+bunx oh-my-openagent mcp oauth logout <server-name>
 
 # Check OAuth token status
-bunx oh-my-opencode mcp oauth status [server-name]
+bunx oh-my-openagent mcp oauth status [server-name]
 ```
 
 ### Options
@@ -219,17 +219,17 @@ bun install -g opencode@latest
 
 ```bash
 # Reinstall plugin
-bunx oh-my-opencode install
+bunx oh-my-openagent install
 ```
 
 ### Doctor Check Failures
 
 ```bash
 # Diagnose with detailed information
-bunx oh-my-opencode doctor --verbose
+bunx oh-my-openagent doctor --verbose
 
 # Check specific category only
-bunx oh-my-opencode doctor --category authentication
+bunx oh-my-openagent doctor --category authentication
 ```
 
 ---
@@ -240,10 +240,10 @@ Use the `--no-tui` option for CI/CD environments.
 
 ```bash
 # Run doctor in CI environment
-bunx oh-my-opencode doctor --no-tui --json
+bunx oh-my-openagent doctor --no-tui --json
 
 # Save results to file
-bunx oh-my-opencode doctor --json > doctor-report.json
+bunx oh-my-openagent doctor --json > doctor-report.json
 ```
 
 ---

@@ -62,7 +62,7 @@ Enable schema autocomplete:
 }
 ```
 
-Run `bunx oh-my-opencode install` for guided setup. Run `opencode models` to list available models.
+Run `bunx oh-my-openagent install` for guided setup. Run `opencode models` to list available models.
 
 ### Quick Start Example
 
@@ -291,7 +291,7 @@ Disable categories: `{ "disabled_categories": ["ultrabrain"] }`
 | **unspecified-high**   | `claude-opus-4-6`   | `claude-opus-4-6` → `gpt-5.4 (high)` → `glm-5` → `k2p5` → `kimi-k2.5` |
 | **writing**            | `gemini-3-flash`    | `gemini-3-flash` → `claude-sonnet-4-6`                         |
 
-Run `bunx oh-my-opencode doctor --verbose` to see effective model resolution for your config.
+Run `bunx oh-my-openagent doctor --verbose` to see effective model resolution for your config.
 
 ---
 

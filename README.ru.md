@@ -12,16 +12,16 @@
 
 > [!TIP] Будьте с нами!
 >
-> | [](https://discord.gg/PUwSMR9XNk)   | Вступайте в наш [Discord](https://discord.gg/PUwSMR9XNk), чтобы общаться с контрибьюторами и пользователями `oh-my-opencode`. |
+> | [](https://discord.gg/PUwSMR9XNk)   | Вступайте в наш [Discord](https://discord.gg/PUwSMR9XNk), чтобы общаться с контрибьюторами и пользователями `oh-my-openagent`. |
 > | ----------------------------------- | ------------------------------------------------------------ |
-> | [](https://x.com/justsisyphus)      | Новости и обновления `oh-my-opencode` раньше публиковались на моём аккаунте X. <br /> После ошибочной блокировки, [@justsisyphus](https://x.com/justsisyphus) публикует обновления вместо меня. |
+> | [](https://x.com/justsisyphus)      | Новости и обновления `oh-my-openagent` раньше публиковались на моём аккаунте X. <br /> После ошибочной блокировки, [@justsisyphus](https://x.com/justsisyphus) публикует обновления вместо меня. |
 > | [](https://github.com/code-yeongyu) | Подпишитесь на [@code-yeongyu](https://github.com/code-yeongyu) на GitHub, чтобы следить за другими проектами. |
 
 <!-- <CENTERED SECTION FOR GITHUB DISPLAY> --> <div align="center">
 
-[![Oh My OpenCode](./.github/assets/hero.jpg)](https://github.com/code-yeongyu/oh-my-openagent#oh-my-opencode)
+[![Oh My OpenAgent](./.github/assets/hero.jpg)](https://github.com/code-yeongyu/oh-my-openagent#oh-my-openagent)
 
-[![Preview](./.github/assets/omo.png)](https://github.com/code-yeongyu/oh-my-openagent#oh-my-opencode)
+[![Preview](./.github/assets/omo.png)](https://github.com/code-yeongyu/oh-my-openagent#oh-my-openagent)
 
 </div>
 
@@ -31,7 +31,7 @@
 
 <div align="center">
 
-[![GitHub Release](https://img.shields.io/github/v/release/code-yeongyu/oh-my-openagent?color=369eff&labelColor=black&logo=github&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/releases) [![npm downloads](https://img.shields.io/npm/dt/oh-my-opencode?color=ff6b35&labelColor=black&style=flat-square)](https://www.npmjs.com/package/oh-my-opencode) [![GitHub Contributors](https://img.shields.io/github/contributors/code-yeongyu/oh-my-openagent?color=c4f042&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/graphs/contributors) [![GitHub Forks](https://img.shields.io/github/forks/code-yeongyu/oh-my-openagent?color=8ae8ff&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/network/members) [![GitHub Stars](https://img.shields.io/github/stars/code-yeongyu/oh-my-openagent?color=ffcb47&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/code-yeongyu/oh-my-openagent?color=ff80eb&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/issues) [![License](https://img.shields.io/badge/license-SUL--1.0-white?labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/blob/master/LICENSE.md) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/code-yeongyu/oh-my-openagent)
+[![GitHub Release](https://img.shields.io/github/v/release/code-yeongyu/oh-my-openagent?color=369eff&labelColor=black&logo=github&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/releases) [![npm downloads](https://img.shields.io/npm/dt/oh-my-openagent?color=ff6b35&labelColor=black&style=flat-square)](https://www.npmjs.com/package/oh-my-openagent) [![GitHub Contributors](https://img.shields.io/github/contributors/code-yeongyu/oh-my-openagent?color=c4f042&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/graphs/contributors) [![GitHub Forks](https://img.shields.io/github/forks/code-yeongyu/oh-my-openagent?color=8ae8ff&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/network/members) [![GitHub Stars](https://img.shields.io/github/stars/code-yeongyu/oh-my-openagent?color=ffcb47&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/stargazers) [![GitHub Issues](https://img.shields.io/github/issues/code-yeongyu/oh-my-openagent?color=ff80eb&labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/issues) [![License](https://img.shields.io/badge/license-SUL--1.0-white?labelColor=black&style=flat-square)](https://github.com/code-yeongyu/oh-my-openagent/blob/master/LICENSE.md) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/code-yeongyu/oh-my-openagent)
 
 English | 한국어 | 日本語 | 简体中文 | Русский
 
@@ -43,25 +43,25 @@ English | 한국어 | 日本語 | 简体中文 | Русский
 
 > «Если Claude Code делает за 7 дней то, на что у человека уходит 3 месяца, Sisyphus справляется за 1 час. Он просто работает, пока задача не выполнена. Это дисциплинированный агент.» <br/>— B, исследователь в области квантовых финансов
 
-> «За один день устранил 8000 предупреждений eslint с помощью Oh My Opencode.» <br/>— [Jacob Ferrari](https://x.com/jacobferrari_/status/2003258761952289061)
+> «За один день устранил 8000 предупреждений eslint с помощью Oh My OpenAgent.» <br/>— [Jacob Ferrari](https://x.com/jacobferrari_/status/2003258761952289061)
 
 > «За ночь конвертировал приложение на tauri в 45k строк в веб-SaaS с помощью Ohmyopencode и ralph loop. Начал с промпта «проинтервьюируй меня», попросил оценки и рекомендации по вопросам. Было удивительно наблюдать за работой и утром проснуться с почти рабочим сайтом!» — [James Hargis](https://x.com/hargabyte/status/2007299688261882202)
 
-> «Используйте oh-my-opencode — вы не захотите возвращаться назад.» <br/>— [d0t3ch](https://x.com/d0t3ch/status/2001685618200580503)
+> «Используйте oh-my-openagent — вы не захотите возвращаться назад.» <br/>— [d0t3ch](https://x.com/d0t3ch/status/2001685618200580503)
 
 > «Пока не могу точно объяснить, почему это так круто, но опыт разработки вышел на совершенно другой уровень.» — [苔硯:こけすずり](https://x.com/kokesuzuri/status/2008532913961529372?s=20)
 
-> «Экспериментирую с open code, oh my opencode и supermemory этим выходным, чтобы собрать нечто среднее между Minecraft и souls-like.» «Попросил добавить анимации приседания, пока хожу на обеденную прогулку. [Видео]» — [MagiMetal](https://x.com/MagiMetal/status/2005374704178373023)
+> «Экспериментирую с open code, oh my openagent и supermemory этим выходным, чтобы собрать нечто среднее между Minecraft и souls-like.» «Попросил добавить анимации приседания, пока хожу на обеденную прогулку. [Видео]» — [MagiMetal](https://x.com/MagiMetal/status/2005374704178373023)
 
 > «Ребята, вам нужно включить это в ядро и нанять его. Серьёзно. Это очень, очень, очень хорошо.» <br/>— Henning Kilset
 
 > «Наймите @yeon_gyu_kim, если сможете его уговорить, этот парень революционизировал opencode.» <br/>— [mysticaltech](https://x.com/mysticaltech/status/2001858758608376079)
 
-> «Oh My OpenCode — это что-то с чем-то» — [YouTube — Darren Builds AI](https://www.youtube.com/watch?v=G_Snfh2M41M)
+> «Oh My OpenAgent — это что-то с чем-то» — [YouTube — Darren Builds AI](https://www.youtube.com/watch?v=G_Snfh2M41M)
 
 ------
 
-# Oh My OpenCode
+# Oh My OpenAgent
 
 Вы жонглируете Claude Code, Codex, случайными OSS-моделями. Настраиваете рабочие процессы. Дебажите агентов.
 
@@ -76,7 +76,7 @@ English | 한국어 | 日本語 | 简体中文 | Русский
 Скопируйте и вставьте этот промпт в ваш LLM-агент (Claude Code, AmpCode, Cursor и т.д.):
 
 ```
-Install and configure oh-my-opencode by following the instructions here:
+Install and configure oh-my-openagent by following the instructions here:
 https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/refs/heads/dev/docs/guide/installation.md
 ```
 
@@ -242,19 +242,19 @@ project/
 
 ------
 
-> **Впервые в oh-my-opencode?** Прочитайте **Обзор**, чтобы понять, что у вас есть, или ознакомьтесь с **руководством по оркестрации**, чтобы узнать, как агенты взаимодействуют.
+> **Впервые в oh-my-openagent?** Прочитайте **Обзор**, чтобы понять, что у вас есть, или ознакомьтесь с **руководством по оркестрации**, чтобы узнать, как агенты взаимодействуют.
 
 ## Удаление
 
-Чтобы удалить oh-my-opencode:
+Чтобы удалить oh-my-openagent:
 
 1. **Удалите плагин из конфига OpenCode**
 
-   Отредактируйте `~/.config/opencode/opencode.json` (или `opencode.jsonc`) и уберите `"oh-my-opencode"` из массива `plugin`:
+   Отредактируйте `~/.config/opencode/opencode.json` (или `opencode.jsonc`) и уберите `"oh-my-openagent"` из массива `plugin`:
 
    ```bash
    # С помощью jq
-   jq '.plugin = [.plugin[] | select(. != "oh-my-opencode")]' \
+   jq '.plugin = [.plugin[] | select(. != "oh-my-openagent")]' \
        ~/.config/opencode/opencode.json > /tmp/oc.json && \
        mv /tmp/oc.json ~/.config/opencode/opencode.json
    ```

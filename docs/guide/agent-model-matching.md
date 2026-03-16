@@ -8,7 +8,7 @@ Think of AI models as developers on a team. Each has a different brain, differen
 
 This isn't a bug. It's the foundation of the entire system.
 
-Oh My OpenCode assigns each agent a model that matches its _working style_ — like building a team where each person is in the role that fits their personality.
+Oh My OpenAgent assigns each agent a model that matches its _working style_ — like building a team where each person is in the role that fits their personality.
 
 ### Sisyphus: The Sociable Lead
 

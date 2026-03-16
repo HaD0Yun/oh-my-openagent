@@ -51,7 +51,7 @@ Since the regex lives in the Go binary and this repo wraps it, the fix is two-pr
 - Relax `(?i)^[\s#/*-]*note:\s*\w` to only match AI-style memo patterns like `Note: this was changed...`, `Note: implementation details...`
 - Add `--exclude-pattern` CLI flag for user-configurable exclusions
 
-**B. This repo (oh-my-opencode)** - the PR scope:
+**B. This repo (oh-my-openagent)** - the PR scope:
 1. Add `exclude_patterns` config field to `CommentCheckerConfigSchema`
 2. Pass `--exclude-pattern` flags to the CLI binary
 3. Add integration tests with mock binaries for false positive scenarios

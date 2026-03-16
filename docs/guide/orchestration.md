@@ -1,6 +1,6 @@
 # Orchestration System Guide
 
-Oh My OpenCode's orchestration system transforms a simple AI agent into a coordinated development team through **separation of planning and execution**.
+Oh My OpenAgent's orchestration system transforms a simple AI agent into a coordinated development team through **separation of planning and execution**.
 
 ---
 
